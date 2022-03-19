@@ -1,0 +1,9 @@
+{
+	"name": "chalkitraining",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "2f450c5a-5d0a-4c01-ae4c-859b80796a96",
+		"tenantId": "4a06d40c-e447-42be-baef-dd0421ed10bd"
+	}
+}
