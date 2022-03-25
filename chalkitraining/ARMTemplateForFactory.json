@@ -1,0 +1,365 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "chalkitraining"
+		},
+		"AzureDataLakeStorageJSON_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageJSON'"
+		},
+		"FileServer1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'FileServer1'"
+		},
+		"UIO Mongo VD registrations_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'UIO Mongo VD registrations'"
+		},
+		"kpireporting_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'kpireporting'"
+		},
+		"AzureDataLakeStorageJSON_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://chalkiblob.dfs.core.windows.net"
+		},
+		"FileServer1_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "d:\\\\PanEToshiko_DQ_UIO_REG.csv"
+		},
+		"FileServer1_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "Niko"
+		},
+		"UIO Mongo VD registrations_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "heroku_app35158283"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/uioregistartionflat')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "MongoDbV2Source",
+								"batchSize": 100
+							},
+							"sink": {
+								"type": "JsonSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "JsonWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "MongoDbV2Collection1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Json_Registration",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/MongoDbV2Collection1')]",
+				"[concat(variables('factoryId'), '/datasets/Json_Registration')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "kpireporting",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "_id",
+						"type": "varchar"
+					},
+					{
+						"name": "vehicle_brand",
+						"type": "varchar"
+					},
+					{
+						"name": "vehicle_deliveryCountry",
+						"type": "varchar"
+					},
+					{
+						"name": "vehicle_nmscCode",
+						"type": "varchar"
+					},
+					{
+						"name": "vehicle_vin",
+						"type": "varchar"
+					},
+					{
+						"name": "vehicle_production_productionDate",
+						"type": "varchar"
+					},
+					{
+						"name": "vehicle_enrichment_localModel_id",
+						"type": "varchar"
+					},
+					{
+						"name": "createdTimestamp_date",
+						"type": "varchar"
+					},
+					{
+						"name": "status_image",
+						"type": "bit"
+					},
+					{
+						"name": "status_nmscProductEnrichment",
+						"type": "bit"
+					},
+					{
+						"name": "status_productEnrichment",
+						"type": "bit"
+					},
+					{
+						"name": "localisation_localModelCode",
+						"type": "varchar"
+					},
+					{
+						"name": "lastModifiedTimestamp_date",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "DQ",
+					"table": "UIO_VD"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/kpireporting')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "kpireporting",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "pk",
+						"type": "uniqueidentifier"
+					},
+					{
+						"name": "vin",
+						"type": "nvarchar"
+					},
+					{
+						"name": "registrationNumber",
+						"type": "nvarchar"
+					},
+					{
+						"name": "fromDate",
+						"type": "nvarchar"
+					},
+					{
+						"name": "emittingCountry",
+						"type": "nvarchar"
+					},
+					{
+						"name": "createdTimeStamp",
+						"type": "nvarchar"
+					},
+					{
+						"name": "toDate",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "DQ",
+					"table": "UIO_registrations_flat"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/kpireporting')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Json_Registration')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageJSON",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Json",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					}
+				},
+				"schema": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageJSON')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MongoDbV2Collection1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "UIO Mongo VD registrations",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "MongoDbV2Collection",
+				"schema": [],
+				"typeProperties": {
+					"collection": "VD"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/UIO Mongo VD registrations')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/registrationsvduiokpireport')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "kpireporting",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/kpireporting')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureDataLakeStorageJSON')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureDataLakeStorageJSON_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureDataLakeStorageJSON_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FileServer1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('FileServer1_properties_typeProperties_host')]",
+					"userId": "[parameters('FileServer1_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('FileServer1_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/UIO Mongo VD registrations')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "MongoDbV2",
+				"typeProperties": {
+					"connectionString": "[parameters('UIO Mongo VD registrations_connectionString')]",
+					"database": "[parameters('UIO Mongo VD registrations_properties_typeProperties_database')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/kpireporting')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('kpireporting_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		}
+	]
+}

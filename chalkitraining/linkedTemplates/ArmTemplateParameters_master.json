@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "chalkitraining"
+		},
+		"AzureDataLakeStorageJSON_accountKey": {
+			"value": ""
+		},
+		"FileServer1_password": {
+			"value": ""
+		},
+		"UIO Mongo VD registrations_connectionString": {
+			"value": ""
+		},
+		"kpireporting_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorageJSON_properties_typeProperties_url": {
+			"value": "https://chalkiblob.dfs.core.windows.net"
+		},
+		"FileServer1_properties_typeProperties_host": {
+			"value": "d:\\\\PanEToshiko_DQ_UIO_REG.csv"
+		},
+		"FileServer1_properties_typeProperties_userId": {
+			"value": "Niko"
+		},
+		"UIO Mongo VD registrations_properties_typeProperties_database": {
+			"value": "heroku_app35158283"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
