@@ -1,0 +1,69 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "kpireporting",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "_id",
+				"type": "varchar"
+			},
+			{
+				"name": "vehicle_brand",
+				"type": "varchar"
+			},
+			{
+				"name": "vehicle_deliveryCountry",
+				"type": "varchar"
+			},
+			{
+				"name": "vehicle_nmscCode",
+				"type": "varchar"
+			},
+			{
+				"name": "vehicle_vin",
+				"type": "varchar"
+			},
+			{
+				"name": "vehicle_production_productionDate",
+				"type": "varchar"
+			},
+			{
+				"name": "vehicle_enrichment_localModel_id",
+				"type": "varchar"
+			},
+			{
+				"name": "createdTimestamp_date",
+				"type": "varchar"
+			},
+			{
+				"name": "status_image",
+				"type": "bit"
+			},
+			{
+				"name": "status_nmscProductEnrichment",
+				"type": "bit"
+			},
+			{
+				"name": "status_productEnrichment",
+				"type": "bit"
+			},
+			{
+				"name": "localisation_localModelCode",
+				"type": "varchar"
+			},
+			{
+				"name": "lastModifiedTimestamp_date",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "DQ",
+			"table": "UIO_VD"
+		}
+	}
+}

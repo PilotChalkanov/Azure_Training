@@ -1,0 +1,12 @@
+{
+	"name": "registrationsvduiokpireport",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "kpireporting",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	}
+}
