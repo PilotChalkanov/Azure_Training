@@ -1,0 +1,17 @@
+{
+	"name": "Json_Registration",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageJSON",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation"
+			}
+		},
+		"schema": {}
+	}
+}
