@@ -1,0 +1,17 @@
+{
+	"name": "sqlruntime",
+	"properties": {
+		"type": "Managed",
+		"typeProperties": {
+			"computeProperties": {
+				"location": "Switzerland North",
+				"dataFlowProperties": {
+					"computeType": "General",
+					"coreCount": 8,
+					"timeToLive": 10,
+					"cleanup": false
+				}
+			}
+		}
+	}
+}
